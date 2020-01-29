@@ -73,7 +73,7 @@ namespace Microsoft.EntityFrameworkCore.Migrations.Design
             Check.NotNull(downOperations, nameof(downOperations));
 
             var builder = new IndentedStringBuilder();
-            var namespaces = new List<string> { "Microsoft.EntityFrameworkCore.Migrations" };
+            var namespaces = new List<string> { "Microsoft.EntityFrameworkCore.Migrations", "System.Diagnostics.CodeAnalysis" };
             namespaces.AddRange(GetNamespaces(upOperations.Concat(downOperations)));
             foreach (var n in namespaces.OrderBy(x => x, new NamespaceComparer()).Distinct())
             {
@@ -90,6 +90,7 @@ namespace Microsoft.EntityFrameworkCore.Migrations.Design
             using (builder.Indent())
             {
                 builder
+                    .AppendLine("[ExcludeFromCodeCoverage]")
                     .Append("public partial class ").Append(Code.Identifier(migrationName)).AppendLine(" : Migration")
                     .AppendLine("{");
                 using (builder.Indent())
